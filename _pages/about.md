@@ -1,1 +1,1 @@
-minimalist\s [post\]
+minimalist's [post]
