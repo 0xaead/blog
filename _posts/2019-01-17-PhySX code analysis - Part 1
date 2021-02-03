@@ -1,0 +1,24 @@
+
+Use reinterpret_cast to convert 4 uint8 to uint32, which is still a common operation in Low level API.
+
+in `common\src\CmBitMap.h`, malloc return void so it should be reinterpret anyway.
+`				PxU32* newMap = reinterpret_cast<PxU32*>(mAllocator.allocate(newWordCount*sizeof(PxU32), __FILE__, __LINE__)); `
+in `common\src\CmBlockArray.h`, ditto. And c-style cast can be used here, too.
+` 				mBlocks.pushBack(reinterpret_cast<T*>(PX_ALLOC(sizeof(T) * mSlabSize, PX_DEBUG_EXP("BlockArray")))); `
+
+Use static_cast to convert between compatible types 
+In `geomutils\src\GuBounds.cpp`
+` 			T *rv = static_cast<T *>(freeTasks->pop());
+			if(rv == NULL)
+				return static_cast<T *>(allocateSlab()); `
+`geomutils\src\GuBounds.cpp`
+`			const PxSphereGeometry& shape = static_cast<const PxSphereGeometry&>(geometry);`
+
+No dynamic_cast used in PhySX 4.1
+
+A lot of const_cast, to remove or to add `const' to an object returned or sent to an interface/getter()...
+In `geomutils\src\mesh\GuBV4Build.cpp`, getPos() and getNeg() are const member function.
+`	AABBTreeNode* pos = const_cast<AABBTreeNode*>(node->getPos());
+	AABBTreeNode* neg = const_cast<AABBTreeNode*>(node->getNeg());`
+
+Also refer Use [const correctness](https://isocpp.org/wiki/faq/const-correctness) to prevent objects from being mutated.
