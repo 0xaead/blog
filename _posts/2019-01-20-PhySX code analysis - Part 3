@@ -1,0 +1,29 @@
+Design patterns
+======================
+
+Factory
+////////////
+In the same way the Capsule Character Controller was created above - with a descriptor object, factory pattern - these shapes are created with Shape Descriptors. In the case of a box, a BoxShapeDesc. This shape descriptor has a Trigger-flag which you can enable (or disable):
+
+             
+void CubePhysX::InitActor(int BodyType)
+{
+    // ...
+    if ( BodyType == GHOST )
+    {
+        BoxShapeDesc.shapeFlags |= NX_TRIGGER_ENABLE; 
+    }
+    else
+    {
+        if(BodyType == RIGID)
+        {
+        // ...
+        }
+    }
+}
+
+Singelton
+/////////////////////
+A singleton is a way to create a global variable, without it really being global.
+It's a combination of a static pointer to the class, a private constructor and a static GetInstance() method that creates the object once(!).
+In phySX, a lot of "Abstract singleton factory" are used.
