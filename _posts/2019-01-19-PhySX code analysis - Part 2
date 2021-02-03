@@ -1,0 +1,9 @@
+
+class design
+=================
+
+Value classes: made on stack, no virtual functions, public destructor, public copy constructor and assignment operator, used like int, bool double.
+Base classes: made to inherit, usually used on heap, public virtual destructor, disable copy constructor and assignment operator (set them private).
+Data classes: static class, all methods are static, no object is instantiated, functions are called on class itself, private constructor.
+Behaviour classes: plugable behaviour, can have virtual methods, used as a base or datamember from another class.
+Exception classes: public destructor, no-fail constructor/copy-constructor, preferable derives from std::exception. Thrown by value, cathed by reference (see up).
