@@ -1,0 +1,40 @@
+A Linux distro:
+e.g. Ubuntu 18.04, which I installed through WSL2. (https://docs.microsoft.com/en-us/windows/wsl/install-win10#manual-installation-steps) 
+
+A docker:
+https://docs.docker.com/desktop/windows/install/
+
+A readdoc docker image:
+https://github.com/readthedocs/readthedocs-docker-images
+docker pull readthedocs/build:latest
+
+Now some prerequisites, or quirks:
+run docker image as root:
+-it -u root <image-name> /bin/bash
+
+1. python3.9
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update 
+sudo apt install python3.9
+
+2. rust
+From https://cryptography.io/en/latest/installation/#debian-ubuntu
+sudo apt-get install build-essential libssl-dev libffi-dev \
+    python3-dev cargo
+
+Below script are crapped from:
+https://readthedocs.org/projects/cryptography/builds/14446988/
+
+su docs
+cd ~
+mkdir -p sandy
+cd sandy
+git clone --no-single-branch --depth 50 https://github.com/pyca/cryptography .
+git fetch origin --force --tags --prune --prune-tags --depth 50 pull/6207/head:external-6207
+git checkout --force 92020fea7581522c734cf745f34789c92085688d
+git clean -d -f -f
+#
+python3 -mvirtualenv /home/docs/checkouts/readthedocs.org/user_builds/cryptography/envs/6207
+/home/docs/checkouts/readthedocs.org/user_builds/cryptography/envs/6207/bin/python -m pip install --upgrade --no-cache-dir pip setuptools
+/home/docs/checkouts/readthedocs.org/user_builds/cryptography/envs/6207/bin/python -m pip install --upgrade --no-cache-dir mock==1.0.1 pillow==5.4.1 "alabaster>=0.7,<0.8,!=0.7.5" commonmark==0.8.1 recommonmark==0.5.0 "sphinx<2" "sphinx-rtd-theme<0.5" "readthedocs-sphinx-ext<2.2"
+/home/docs/checkouts/readthedocs.org/user_builds/cryptography/envs/6207/bin/python -m pip install --upgrade --upgrade-strategy eager --no-cache-dir .[docs]
