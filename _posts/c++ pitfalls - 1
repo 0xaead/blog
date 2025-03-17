@@ -156,3 +156,26 @@ int rounded = static_cast<int>(std::round(pi));
 
 C++’s implicit conversions can be powerful but are full of **traps**, so handling them carefully is crucial! 🚀
 
+And be carful to those implicit types, e.g. in https://en.cppreference.com/w/cpp/iterator/size
+| size_t | unsigned integer type returned by the sizeof operator | (typedef) |
+It is unsigned int! Check below unexpected behavior from https://pvs-studio.com/en/blog/posts/cpp/1129/:
+```cpp
+#include <vector>
+#include <numeric>
+#include <iostream>
+
+int average(const std::vector<int>& v) {
+    if (v.empty()) {
+        return 0;
+    }
+    return std::accumulate(v.begin(), v.end(), 0) / v.size();
+}
+
+int main() {
+    std::cout << average({-1,-1,-1});
+}
+```
+Anyone who takes a glimpse at this code would expect the result to be -1. However, unfortunately, the result is different. A program built by GCC for the x86-64 platform displays the following:
+```
+1431655764
+```
